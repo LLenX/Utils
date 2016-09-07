@@ -9,7 +9,8 @@ if __name__ == '__main__':
         print("Usage: dict <word>")
         sys.exit()
 
+    dict = Dictionary()
     word = sys.argv[1]
-    result = Dictionary.search(word)
+    result = dict.search(word)
 
     print(result, end='')
