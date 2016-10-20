@@ -24,7 +24,7 @@ class Path {
      *  relative path
      * @param path_str the string represent a path
      */
-    Path(const std::string &path_str);
+    explicit Path(const std::string &path_str);
 
     /**
      * copy constructor
@@ -55,6 +55,13 @@ class Path {
      * @return the string representation of the path
      */
     std::string ToString() const;
+
+    /**
+     * construct a the path from a string represents the path, synonym to the
+     * constructor
+     * @param path_str the string represents the path
+     */
+    static Path FromString(const std::string &path_str);
 
     /**
      * check whether the path represents an absolute path
