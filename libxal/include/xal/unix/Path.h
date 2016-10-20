@@ -1,7 +1,9 @@
 #ifndef XAL_UNIX_PATH_H_
 #define XAL_UNIX_PATH_H_
 
+#include "path/PathExeption.h"
 #include <memory>
+#include <stdexcept>
 #include <string>
 
 namespace xal {
@@ -14,6 +16,11 @@ namespace unix {
 class Path {
   public:
     /**
+     * pimpl idiom
+     */
+    class PathImpl;
+
+    /**
      * the path contains a relative path of the current working directory by
      * default
      */
@@ -24,7 +31,7 @@ class Path {
      *  relative path
      * @param path_str the string represent a path
      */
-    explicit Path(const std::string &path_str);
+    explicit Path(const std::string &path_str) throw(InvalidPath);
 
     /**
      * copy constructor
@@ -61,7 +68,7 @@ class Path {
      * constructor
      * @param path_str the string represents the path
      */
-    static Path FromString(const std::string &path_str);
+    static Path FromString(const std::string &path_str) throw(InvalidPath);
 
     /**
      * check whether the path represents an absolute path
@@ -70,11 +77,6 @@ class Path {
     bool IsAbsolute() const;
 
   private:
-    /**
-     * pimpl idiom
-     */
-    struct PathImpl;
-
     /**
      * implementation of the class
      */
