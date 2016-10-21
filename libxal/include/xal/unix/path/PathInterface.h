@@ -14,7 +14,16 @@ namespace unix {
  * Path support the unix-like path format
  */
 class Path {
+    // static function for utility use
+    // provide basic functionality about the path in the general idea
   public:
+    /**
+     * get the path of the current working directory
+     * @return the path represents the current working directory
+     */
+    static Path GetCwd();
+
+  public: // methods
     /**
      * pimpl idiom
      */
@@ -71,10 +80,25 @@ class Path {
     static Path FromString(const std::string &path_str) throw(InvalidPath);
 
     /**
+     * append the tail_path to current path, require tail_path is a relative path
+     * @param tail_path the path to append after this path
+     * @return reference to this path
+     */
+    Path &Append(const Path &tail_path) throw(InvalidPath, WrongPathType);
+
+    /**
      * check whether the path represents an absolute path
      * @return true if the path is an absolute path, false otherwise
      */
     bool IsAbsolute() const;
+
+    /**
+     * convert the relative path to an absolute path relative to the current
+     * working directory, do nothing and return false if it's a absolute path
+     * already
+     * @return true if convert successfully, false if it's an absolute path already
+     */
+    bool ToAbsolute() throw(InvalidPath);
 
   private:
     /**

@@ -61,8 +61,18 @@ Path::PathImpl::AppendToken(const std::string &path_token) throw(InvalidPath) {
     path_state_->PathAppendToken(path_token, path_token_seq_);
 }
 
+
 void Path::PathImpl::SetState(bool is_absolute) {
     path_state_ = PathState::CreateState(is_absolute);
+}
+
+void Path::PathImpl::Append(
+    const Path::PathImpl &tail_path_impl) throw(InvalidPath) {
+    PathImpl temp(*this);
+    for (const auto &path_token : tail_path_impl.path_token_seq_) {
+        temp.AppendToken(path_token);
+    }
+    *this = std::move(temp);
 }
 
 } // namespace unix

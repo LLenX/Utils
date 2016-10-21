@@ -74,23 +74,23 @@ class Path::PathImpl {
     void BuildPathToken(const std::string &path_str) throw(InvalidPath);
 
     /**
-     * tokenize the tokens in the path string seperated by the slash
-     * @param path_str the string represents a path
-     * @return the sequence after the path string tokenized
+     * implementation of append
+     * @param tail_path_impl the implementation of the tail relative path
      */
-    static TokenSeq TokenizePathStr(const std::string &path_str);
-
-    /**
-     * append a token after the current token sequence
-     * @param path_token one token of the path
-     */
-    void AppendToken(const std::string &path_token) throw(InvalidPath);
+    void Append(const PathImpl &tail_path_impl) throw(InvalidPath);
 
     /**
      * determine whether the current path is an absolute path
      * @return true if the path is an absolute path, false if is relative
      */
     bool IsAbsolute() const;
+
+    /**
+     * tokenize the tokens in the path string seperated by the slash
+     * @param path_str the string represents a path
+     * @return the sequence after the path string tokenized
+     */
+    static TokenSeq TokenizePathStr(const std::string &path_str);
 
   private:
     /**
@@ -107,6 +107,12 @@ class Path::PathImpl {
      * take care of the operation of an absolute path
      */
     class AbsolutePathState;
+
+    /**
+     * append a token after the current token sequence
+     * @param path_token one token of the path
+     */
+    void AppendToken(const std::string &path_token) throw(InvalidPath);
 
     /**
      * sequence of tokens represents the whole path with is_absolute_
