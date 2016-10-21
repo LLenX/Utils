@@ -1,17 +1,22 @@
 #include "xal/unix/path/PathState.h"
-#include "xal/unix/path/PathImpl.h"
-#include "xal/unix/Path.h"
 #include <regex>
 
 namespace xal {
 
 namespace unix {
 
-Path::Path() : path_impl_(new PathImpl) {}
+Path::Path()
+    : path_impl_(new PathImpl) {}
 
-Path::Path(const std::string &path_str) throw(InvalidPath) : Path() {
-    path_impl_->SetPathState(path_str);
+Path::Path(const std::string &path_str) throw(InvalidPath)
+    : Path() {
+    path_impl_->SetPathStateFromString(path_str);
     path_impl_->BuildPathToken(path_str);
+}
+
+Path &Path::operator=(const Path &rhs) {
+    *path_impl_ = *rhs.path_impl_;
+    return *this;
 }
 
 std::string Path::ToString() const {
@@ -25,6 +30,9 @@ Path Path::FromString(const std::string &path_str) throw(InvalidPath) {
 bool Path::IsAbsolute() const {
     return path_impl_->IsAbsolute();
 }
+
+Path::Path(const Path &that)
+    : path_impl_(std::make_unique<PathImpl>(*that.path_impl_)) {}
 
 } // namespace unix
 

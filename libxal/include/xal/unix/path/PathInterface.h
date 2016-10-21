@@ -34,10 +34,10 @@ class Path {
     explicit Path(const std::string &path_str) throw(InvalidPath);
 
     /**
-     * copy constructor
+     * copy constructor, get a copy of that path
      * @param that the path to be copied
      */
-    Path(const Path &that) = default;
+    Path(const Path &that);
 
     /**
      * move constructor
@@ -49,7 +49,7 @@ class Path {
      * copy assignment operator
      * @param rhs the path to be copied
      */
-    Path &operator=(const Path &rhs) = default;
+    Path &operator=(const Path &rhs);
 
     /**
      * move assignment operator

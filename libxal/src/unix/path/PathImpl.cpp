@@ -8,7 +8,17 @@ namespace unix {
 Path::PathImpl::PathImpl()
     : path_state_(PathState::CreateState(false)) {}
 
-void Path::PathImpl::SetPathState(const std::string &path_str) {
+Path::PathImpl::PathImpl(const Path::PathImpl &that)
+    : path_token_seq_(that.path_token_seq_),
+      path_state_(PathState::CreateState(that.IsAbsolute())) {}
+
+Path::PathImpl &Path::PathImpl::operator=(const Path::PathImpl &that) {
+    path_token_seq_ = that.path_token_seq_;
+    SetState(that.IsAbsolute());
+    return *this;
+}
+
+void Path::PathImpl::SetPathStateFromString(const std::string &path_str) {
     bool is_absolute = not path_str.empty() and path_str[0] == '/';
     path_state_ = PathState::CreateState(is_absolute);
 }
@@ -41,6 +51,7 @@ Path::PathImpl::TokenizePathStr(const std::string &path_str) {
 
     for (; rgx_iter != rgx_iter_end;) {
         token_seq.push_back((*rgx_iter)[1]);
+        ++rgx_iter;
     }
     return token_seq;
 }
@@ -48,6 +59,10 @@ Path::PathImpl::TokenizePathStr(const std::string &path_str) {
 void
 Path::PathImpl::AppendToken(const std::string &path_token) throw(InvalidPath) {
     path_state_->PathAppendToken(path_token, path_token_seq_);
+}
+
+void Path::PathImpl::SetState(bool is_absolute) {
+    path_state_ = PathState::CreateState(is_absolute);
 }
 
 } // namespace unix

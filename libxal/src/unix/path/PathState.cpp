@@ -19,6 +19,9 @@ std::string Path::PathImpl::PathState::PathPrefix() const {
 
 std::string
 Path::PathImpl::PathState::ConcatToken(const TokenSeq &token_seq) const {
+    if (token_seq.empty() and IsAbsolute()) {
+        return "/";
+    }
     std::ostringstream res_stream;
     for (const auto &token : token_seq) {
         res_stream << '/' << token;
