@@ -1,7 +1,7 @@
 #ifndef XAL_UNIX_PATH_PATHIMPL_H_
 #define XAL_UNIX_PATH_PATHIMPL_H_
 
-#include "../Path.h"
+#include "PathInterface.h"
 #include "PathExeption.h"
 #include <string>
 #include <vector>
