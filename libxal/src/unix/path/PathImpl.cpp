@@ -75,6 +75,16 @@ void Path::PathImpl::Append(
     *this = std::move(temp);
 }
 
+bool Path::PathImpl::operator==(const Path::PathImpl &rhs) const {
+    if (IsAbsolute() != rhs.IsAbsolute()) {
+        // comparison of path with different type is non-sense
+        // if it's really needed to compare a relative path to a absolute path
+        // use ToAbsolute first
+        return false;
+    }
+    return path_token_seq_ == rhs.path_token_seq_;
+}
+
 } // namespace unix
 
 } // namespace xal

@@ -67,6 +67,21 @@ class Path {
     Path &operator=(Path &&rhs) = default;
 
     /**
+     * determine the equality of two paths
+     * note comparison between different type is always false
+     * @param rhs another path to compare
+     * @return true if two paths are the same, false if not
+     */
+    bool operator==(const Path &rhs) const;
+
+    /**
+     * determine the inequality of two paths
+     * @param rhs another path to compare
+     * @return true if two paths are different, false if they are the same
+     */
+    bool operator!=(const Path &rhs) const;
+
+    /**
      * convert the path to the string representation
      * @return the string representation of the path
      */
@@ -93,12 +108,12 @@ class Path {
     bool IsAbsolute() const;
 
     /**
-     * convert the relative path to an absolute path relative to the current
-     * working directory, do nothing and return false if it's a absolute path
-     * already
-     * @return true if convert successfully, false if it's an absolute path already
+     * get the absolute path from of this path, that is a relative path relative
+     * to the working directory would be returned, or return the absolute path
+     * itself
+     * @return the absolute path representation of this path
      */
-    bool ToAbsolute() throw(InvalidPath);
+    Path ToAbsolute() throw(InvalidPath);
 
   private:
     /**

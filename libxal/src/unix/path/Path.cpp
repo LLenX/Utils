@@ -22,6 +22,14 @@ Path &Path::operator=(const Path &rhs) {
     return *this;
 }
 
+bool Path::operator==(const Path &rhs) const {
+    return *path_impl_ == *rhs.path_impl_;
+}
+
+bool Path::operator!=(const Path &rhs) const {
+    return not(*this == rhs);
+}
+
 std::string Path::ToString() const {
     return path_impl_->ToString();
 }
@@ -42,16 +50,14 @@ bool Path::IsAbsolute() const {
     return path_impl_->IsAbsolute();
 }
 
-bool Path::ToAbsolute() throw(InvalidPath) {
+Path Path::ToAbsolute() throw(InvalidPath) {
     if (IsAbsolute()) {
-        return false;
+        return *this;
     }
     Path new_path(GetCwd());
     new_path.Append(*this);
-    *this = std::move(new_path);
-    return true;
+    return new_path;
 }
-
 
 } // namespace unix
 

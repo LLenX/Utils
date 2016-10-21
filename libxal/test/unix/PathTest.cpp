@@ -107,3 +107,14 @@ TEST_F(PathTest, TestAppend) {
     EXPECT_STREQ(absolute_path.Append(path2).ToString().data(),
                  "/absolute/hello/world");
 }
+
+TEST_F(PathTest, TestEquality) {
+    Path pathA = Path::FromString("/hello/world"), pathB = Path::FromString(
+        "hello/world"), pathC = Path::FromString("../../hello/world");
+    EXPECT_NE(pathA, pathB);
+    EXPECT_NE(pathA, pathC);
+    EXPECT_NE(pathB, pathC);
+    EXPECT_EQ(pathA, path1);
+    EXPECT_EQ(pathB, path2);
+    EXPECT_EQ(pathC, path3);
+}

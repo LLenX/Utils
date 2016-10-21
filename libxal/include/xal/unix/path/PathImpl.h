@@ -54,6 +54,13 @@ class Path::PathImpl {
     PathImpl &operator=(PathImpl &&that) = default;
 
     /**
+     * implementation of the equal comparison of two paths
+     * @param rhs another PathImpl to compare
+     * @return true if two paths are equal, false if not
+     */
+    bool operator==(const PathImpl &rhs) const;
+
+    /**
      * proxy of the ToString for the path state
      * @return the string represents the path
      */
