@@ -57,13 +57,55 @@ bool Path::IsAbsolute() const {
     return path_impl_->IsAbsolute();
 }
 
-Path Path::ToAbsolute() throw(InvalidPath) {
+bool Path::IsParentOf(const Path &path) const {
+    if (path.IsAbsolute() not_eq IsAbsolute()) {
+        return false;
+    }
+    return path_impl_->IsParentOf(*path.path_impl_);
+}
+
+Path Path::AbsolutePath() const throw(InvalidPath) {
     if (IsAbsolute()) {
         return *this;
     }
-    Path new_path(GetCwd());
+    Path new_path(CurrentWorkingDirectory());
     new_path.Append(*this);
     return new_path;
+}
+
+Path
+Path::CommonPrefix(const Path &path1, const Path &path2) throw(WrongPathType) {
+    if (path1.IsAbsolute() not_eq path2.IsAbsolute()) {
+        throw WrongPathType("trying to get prefix of paths of different types");
+    }
+    Path result_path;
+    result_path.path_impl_->SetState(path1.IsAbsolute());
+    result_path.path_impl_->SetCommonPrefix(
+        *path1.path_impl_, *path2.path_impl_);
+    return result_path;
+}
+
+size_t Path::Size() const {
+    return path_impl_->Size();
+}
+
+void Path::Swap(Path &rhs) {
+    path_impl_.swap(rhs.path_impl_);
+}
+
+Path &Path::ToParentDirectory() throw(InvalidPath) {
+    path_impl_->ToParentDirectory();
+    return *this;
+}
+
+std::string Path::FileName() const {
+    return path_impl_->FileName();
+}
+
+Path Path::ParentDirectory() throw(InvalidPath) {
+    Path parent_path(*this);
+    parent_path.ToParentDirectory();
+    return parent_path;
 }
 
 } // namespace posix

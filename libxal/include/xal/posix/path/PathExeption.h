@@ -1,10 +1,9 @@
-#ifndef XAL_UNIX_PATH_PATH_EXEPTION_H_
-#define XAL_UNIX_PATH_PATH_EXEPTION_H_
+#ifndef XAL_POSIX_PATH_PATH_EXEPTION_H_
+#define XAL_POSIX_PATH_PATH_EXEPTION_H_
 
 #include <stdexcept>
 
 namespace xal {
-
 namespace posix {
 
 /**
@@ -35,7 +34,6 @@ class WrongPathType : public std::invalid_argument {
 };
 
 } // namespace posix
-
 } // namespace xal
 
-#endif //XAL_UNIX_PATH_PATH_EXEPTION_H_
+#endif //XAL_POSIX_PATH_PATH_EXEPTION_H_

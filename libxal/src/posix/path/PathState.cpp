@@ -29,15 +29,6 @@ Path::PathImpl::PathState::ConcatToken(const TokenSeq &token_seq) const {
     return res_stream.str();
 }
 
-void Path::PathImpl::PathState::PathAppendToken(
-    const std::string &token, Path::PathImpl::TokenSeq &token_seq) const {
-    if (token == "..") {
-        DealWithDoubleDot(token_seq);
-    } else if (token != ".") {
-        token_seq.push_back(token);
-    }
-}
-
 bool Path::PathImpl::PathState::IsAbsolute() const {
     return is_absolute_;
 }
@@ -63,6 +54,23 @@ void Path::PathImpl::RelativePathState::DealWithDoubleDot(
     }
 }
 
+bool Path::PathImpl::RelativePathState::IsParentOfLatter(
+    const Path::PathImpl::TokenSeq &parent_path,
+    const Path::PathImpl::TokenSeq &child_path) const {
+    if (parent_path.empty() or parent_path.back() == "..") {
+        if (child_path.empty() or child_path.back() == "..") {
+            return parent_path.size() > child_path.size();
+        }
+        return true;
+    }
+    if (child_path.back() == ".." or parent_path.size() >= child_path.size()) {
+        return false;
+    }
+    return std::mismatch(
+        parent_path.begin(), parent_path.end(), child_path.begin()).first ==
+           parent_path.end();
+}
+
 void Path::PathImpl::AbsolutePathState::DealWithDoubleDot(
     Path::PathImpl::TokenSeq &token_seq) const throw(InvalidPath) {
     if (token_seq.empty()) {
@@ -70,6 +78,17 @@ void Path::PathImpl::AbsolutePathState::DealWithDoubleDot(
     } else {
         token_seq.pop_back();
     }
+}
+
+bool Path::PathImpl::AbsolutePathState::IsParentOfLatter(
+    const Path::PathImpl::TokenSeq &parent_path,
+    const Path::PathImpl::TokenSeq &child_path) const {
+    if (parent_path.size() >= child_path.size()) {
+        return false;
+    }
+    return std::mismatch(
+        parent_path.begin(), parent_path.end(), child_path.begin()).first ==
+           parent_path.end();
 }
 } // namespace posix
 

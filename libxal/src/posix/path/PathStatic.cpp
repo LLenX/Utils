@@ -5,7 +5,7 @@ namespace xal {
 
 namespace posix {
 
-Path Path::GetCwd() {
+Path Path::CurrentWorkingDirectory() {
     int64_t path_max_length(4096);
 #if defined(PATH_MAX)
     path_max_length = PATH_MAX;
@@ -24,6 +24,10 @@ Path Path::GetCwd() {
     Path cwd(path_buffer);
     delete[] path_buffer;
     return cwd;
+}
+
+Path Path::HomeDirectory() {
+    return Path(getenv("HOME"));
 }
 
 } // namespace xal

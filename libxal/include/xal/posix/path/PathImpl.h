@@ -1,13 +1,18 @@
-#ifndef XAL_UNIX_PATH_PATHIMPL_H_
-#define XAL_UNIX_PATH_PATHIMPL_H_
+#ifndef XAL_POSIX_PATH_PATHIMPL_H_
+#define XAL_POSIX_PATH_PATHIMPL_H_
 
 #include "posix/Path.h"
 #include "PathExeption.h"
 #include <string>
 #include <vector>
 
-namespace xal {
+#ifdef XAL_POSIX_PATH_TEST_PRIVATE
 
+#include <gtest/gtest_prod.h>
+
+#endif
+
+namespace xal {
 namespace posix {
 
 /**
@@ -15,7 +20,6 @@ namespace posix {
  */
 class Path::PathImpl {
   public:
-
     /**
      * the container of the sequence of path token
      */
@@ -65,6 +69,13 @@ class Path::PathImpl {
     PathImpl &operator=(PathImpl &&that) = default;
 
     /**
+     * set the token sequence to the common prefix of two paths
+     * @param path1 first path
+     * @param path2 second path
+     */
+    void SetCommonPrefix(const PathImpl &path1, const PathImpl &path2);
+
+    /**
      * implementation of the equal comparison of two paths
      * @param rhs another PathImpl to compare
      * @return true if two paths are equal, false if not
@@ -84,10 +95,46 @@ class Path::PathImpl {
     void Append(const PathImpl &tail_path_impl) throw(InvalidPath);
 
     /**
+     * convert current path to it's parent directory
+     */
+    void ToParentDirectory() throw(InvalidPath);
+
+    /**
      * determine whether the current path is an absolute path
      * @return true if the path is an absolute path, false if is relative
      */
     bool IsAbsolute() const;
+
+    /**
+     * implementation of IsParentOf
+     * @return true if this path is a parent path of
+     */
+    bool IsParentOf(const PathImpl &path) const;
+
+    /**
+     * implementation of Path::Size()
+     * @return the number of tokens in the token sequence
+     */
+    size_t Size() const;
+
+    /**
+     * implementation of FileName
+     * @return the file name of the path leads to or an empty string
+     */
+    std::string FileName() const;
+
+    /**
+     * reset the state of the path
+     * @param is_absolute true if set to absolute path state, false if relative
+     */
+    void SetState(bool is_absolute);
+
+  private:
+#ifdef XAL_POSIX_PATH_TEST_PRIVATE
+
+    FRIEND_TEST(PathImplTest, TestTokenize);
+
+#endif // ifdef NDEBUG
 
     /**
      * tokenize the tokens in the path string seperated by the slash
@@ -96,7 +143,6 @@ class Path::PathImpl {
      */
     static TokenSeq TokenizePathStr(const std::string &path_str);
 
-  private:
     /**
      * represents the state of the path, relative or absolute
      */
@@ -138,12 +184,6 @@ class Path::PathImpl {
     void AppendToken(const std::string &path_token) throw(InvalidPath);
 
     /**
-     * reset the state of the path
-     * @param is_absolute true if set to absolute path state, false if relative
-     */
-    void SetState(bool is_absolute);
-
-    /**
      * the state of the class
      */
     std::unique_ptr<PathState> path_state_;
@@ -151,7 +191,6 @@ class Path::PathImpl {
 };
 
 } // namespace posix
-
 } // namespace xal
 
-#endif // XAL_UNIX_PATH_PATHIMPL_H_
+#endif // XAL_POSIX_PATH_PATHIMPL_H_
