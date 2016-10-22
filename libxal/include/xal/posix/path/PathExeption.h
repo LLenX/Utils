@@ -5,7 +5,7 @@
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 /**
  * throwed when encounter logically impossible path like try to access the
@@ -34,7 +34,7 @@ class WrongPathType : public std::invalid_argument {
         : invalid_argument(what) {}
 };
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal
 

@@ -1,9 +1,9 @@
-#include "xal/unix/path/PathState.h"
+#include "posix/path/PathState.h"
 #include <regex>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 Path::PathImpl::PathImpl()
     : path_state_(PathState::CreateState(false)) {}
@@ -11,6 +11,13 @@ Path::PathImpl::PathImpl()
 Path::PathImpl::PathImpl(const Path::PathImpl &that)
     : path_token_seq_(that.path_token_seq_),
       path_state_(PathState::CreateState(that.IsAbsolute())) {}
+
+Path::PathImpl::PathImpl(const std::string path_str) {
+    SetPathStateFromString(path_str);
+    BuildPathToken(path_str);
+}
+
+Path::PathImpl::~PathImpl() {}
 
 Path::PathImpl &Path::PathImpl::operator=(const Path::PathImpl &that) {
     path_token_seq_ = that.path_token_seq_;
@@ -85,6 +92,6 @@ bool Path::PathImpl::operator==(const Path::PathImpl &rhs) const {
     return path_token_seq_ == rhs.path_token_seq_;
 }
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal

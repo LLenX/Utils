@@ -1,19 +1,19 @@
-#include "xal/unix/path/PathState.h"
+#include "posix/path/PathState.h"
 #include <sstream>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 Path::PathImpl::PathState::PathState(bool is_absolute)
     : is_absolute_(is_absolute) {}
 
 std::string
 Path::PathImpl::PathState::PathToString(const TokenSeq &token_seq) const {
-    return PathPrefix() + ConcatToken(token_seq);
+    return PathStart() + ConcatToken(token_seq);
 }
 
-std::string Path::PathImpl::PathState::PathPrefix() const {
+std::string Path::PathImpl::PathState::PathStart() const {
     return "";
 }
 
@@ -50,7 +50,7 @@ Path::PathImpl::PathState::CreateState(bool is_absolute) {
     return std::make_unique<RelativePathState>();
 }
 
-std::string Path::PathImpl::RelativePathState::PathPrefix() const {
+std::string Path::PathImpl::RelativePathState::PathStart() const {
     return ".";
 }
 
@@ -71,6 +71,6 @@ void Path::PathImpl::AbsolutePathState::DealWithDoubleDot(
         token_seq.pop_back();
     }
 }
-} // namespace unix
+} // namespace posix
 
 } // namespace xal

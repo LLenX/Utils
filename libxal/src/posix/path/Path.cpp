@@ -1,24 +1,31 @@
-#include "xal/unix/path/PathState.h"
+#include "posix/path/PathState.h"
 #include <regex>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 Path::Path()
-    : path_impl_(new PathImpl) {}
+    : path_impl_(std::make_unique<PathImpl>()) {}
 
 Path::Path(const Path &that)
     : path_impl_(std::make_unique<PathImpl>(*that.path_impl_)) {}
 
+Path::Path(Path &&that)
+    : path_impl_(std::move(that.path_impl_)) {}
+
 Path::Path(const std::string &path_str) throw(InvalidPath)
-    : Path() {
-    path_impl_->SetPathStateFromString(path_str);
-    path_impl_->BuildPathToken(path_str);
-}
+    : path_impl_(std::make_unique<PathImpl>(path_str)) {}
+
+Path::~Path() {}
 
 Path &Path::operator=(const Path &rhs) {
     *path_impl_ = *rhs.path_impl_;
+    return *this;
+}
+
+Path &Path::operator=(Path &&rhs) {
+    path_impl_ = std::move(rhs.path_impl_);
     return *this;
 }
 
@@ -59,6 +66,6 @@ Path Path::ToAbsolute() throw(InvalidPath) {
     return new_path;
 }
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal

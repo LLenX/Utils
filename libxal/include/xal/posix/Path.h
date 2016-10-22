@@ -1,14 +1,14 @@
 #ifndef XAL_UNIX_PATH_PATH_INTERFACE_H_
 #define XAL_UNIX_PATH_PATH_INTERFACE_H_
 
-#include "PathExeption.h"
+#include "path/PathExeption.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 /**
  * Path support the unix-like path format
@@ -52,7 +52,13 @@ class Path {
      * move constructor
      * @param that the path to be moved
      */
-    Path(Path &&that) = default;
+    Path(Path &&that);
+
+    /**
+     * destructor preventing compiler from generating a default one in the
+     * the header file
+     */
+    ~Path();
 
     /**
      * copy assignment operator
@@ -64,7 +70,7 @@ class Path {
      * move assignment operator
      * @param rhs the path to be moved
      */
-    Path &operator=(Path &&rhs) = default;
+    Path &operator=(Path &&rhs);
 
     /**
      * determine the equality of two paths
@@ -122,7 +128,7 @@ class Path {
     std::unique_ptr<PathImpl> path_impl_;
 };
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal
 

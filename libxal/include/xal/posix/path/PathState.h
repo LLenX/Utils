@@ -7,7 +7,7 @@
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 class Path::PathImpl::PathState {
   public:
@@ -58,7 +58,7 @@ class Path::PathImpl::PathState {
      * get the prefix string of the path
      * @return the prefix of the path
      */
-    virtual std::string PathPrefix() const;
+    virtual std::string PathStart() const;
 
   private:
     /**
@@ -108,10 +108,10 @@ class Path::PathImpl::RelativePathState : public PathImpl::PathState {
      * get the prefix of the relative path
      * @return the prefix of the relative path (".")
      */
-    virtual std::string PathPrefix() const override;
+    virtual std::string PathStart() const override;
 };
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal
 

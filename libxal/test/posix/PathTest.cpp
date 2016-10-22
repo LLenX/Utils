@@ -1,19 +1,8 @@
 #include <gtest/gtest.h>
-#include "xal/unix/Path.h"
+#include "posix/Path.h"
+#include "posix/path/PathImpl.h"
 
-using xal::unix::Path;
-
-TEST(PathImplTest, TestSetState) {
-    Path::PathImpl path_impl;
-    path_impl.SetPathStateFromString(".");
-    EXPECT_FALSE(path_impl.IsAbsolute());
-    path_impl.SetPathStateFromString("/");
-    EXPECT_TRUE(path_impl.IsAbsolute());
-    path_impl.SetPathStateFromString("/hello/world/");
-    EXPECT_TRUE(path_impl.IsAbsolute());
-    path_impl.SetPathStateFromString("hello/world/");
-    EXPECT_FALSE(path_impl.IsAbsolute());
-}
+using xal::posix::Path;
 
 TEST(PathImplTest, TestTokenize) {
     Path::PathImpl::TokenSeq hello_world_sequence{"hello", "world"};
@@ -79,7 +68,7 @@ TEST_F(PathTest, TestFromString) {
     EXPECT_STREQ(Path::FromString("../../hello/world/../").ToString().data(),
                  "./../../hello");
 
-    EXPECT_THROW(Path::FromString("/hello/../.."), xal::unix::InvalidPath);
+    EXPECT_THROW(Path::FromString("/hello/../.."), xal::posix::InvalidPath);
 }
 
 TEST_F(PathTest, TestCopy) {
@@ -98,12 +87,12 @@ TEST_F(PathTest, TestAppend) {
     Path relative_path(Path::FromString("relative")), absolute_path(
         Path::FromString("/absolute"));
 
-    EXPECT_THROW(relative_path.Append(path1), xal::unix::WrongPathType);
+    EXPECT_THROW(relative_path.Append(path1), xal::posix::WrongPathType);
     EXPECT_STREQ(relative_path.Append(path3).ToString().data(),
                  "./../hello/world");
     EXPECT_STREQ(relative_path.Append(path2).ToString().data(),
                  "./../hello/world/hello/world");
-    EXPECT_THROW(absolute_path.Append(path3), xal::unix::InvalidPath);
+    EXPECT_THROW(absolute_path.Append(path3), xal::posix::InvalidPath);
     EXPECT_STREQ(absolute_path.Append(path2).ToString().data(),
                  "/absolute/hello/world");
 }

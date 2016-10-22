@@ -1,9 +1,9 @@
-#include "xal/unix/Path.h"
+#include "posix/Path.h"
 #include <unistd.h>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 Path Path::GetCwd() {
     int64_t path_max_length(4096);
@@ -28,4 +28,4 @@ Path Path::GetCwd() {
 
 } // namespace xal
 
-} // namespace unix
+} // namespace posix

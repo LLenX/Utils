@@ -1,14 +1,14 @@
 #ifndef XAL_UNIX_PATH_PATHIMPL_H_
 #define XAL_UNIX_PATH_PATHIMPL_H_
 
-#include "PathInterface.h"
+#include "posix/Path.h"
 #include "PathExeption.h"
 #include <string>
 #include <vector>
 
 namespace xal {
 
-namespace unix {
+namespace posix {
 
 /**
  * private members of the Path
@@ -40,6 +40,17 @@ class Path::PathImpl {
     PathImpl(PathImpl &&that) = default;
 
     /**
+     * prevent compiler from generating the definition in place
+     */
+    ~PathImpl();
+
+    /**
+     * implementation of the constructor of Path that take a string
+     * @param path_str the string that represents the path
+     */
+    PathImpl(const std::string path_str);
+
+    /**
      * copy assignment
      * @param that the PathImpl to be copied
      * @return reference to this
@@ -65,20 +76,6 @@ class Path::PathImpl {
      * @return the string represents the path
      */
     std::string ToString() const;
-
-    /**
-     * used in `Path(const std::string&)`
-     * set the path to relative or absolute
-     * @param path_str the string represents the path
-     */
-    void SetPathStateFromString(const std::string &path_str);
-
-    /**
-     * used in `Path(const std::string&)`
-     * build the path according to the string of the path
-     * @param path_str the copy of the string represents the path
-     */
-    void BuildPathToken(const std::string &path_str) throw(InvalidPath);
 
     /**
      * implementation of append
@@ -116,15 +113,29 @@ class Path::PathImpl {
     class AbsolutePathState;
 
     /**
+     * sequence of tokens represents the whole path with is_absolute_
+     */
+    TokenSeq path_token_seq_;
+
+    /**
+     * used in `Path(const std::string&)`
+     * set the path to relative or absolute
+     * @param path_str the string represents the path
+     */
+    void SetPathStateFromString(const std::string &path_str);
+
+    /**
+     * used in `Path(const std::string&)`
+     * build the path according to the string of the path
+     * @param path_str the copy of the string represents the path
+     */
+    void BuildPathToken(const std::string &path_str) throw(InvalidPath);
+
+    /**
      * append a token after the current token sequence
      * @param path_token one token of the path
      */
     void AppendToken(const std::string &path_token) throw(InvalidPath);
-
-    /**
-     * sequence of tokens represents the whole path with is_absolute_
-     */
-    TokenSeq path_token_seq_;
 
     /**
      * reset the state of the path
@@ -139,7 +150,7 @@ class Path::PathImpl {
 
 };
 
-} // namespace unix
+} // namespace posix
 
 } // namespace xal
 
