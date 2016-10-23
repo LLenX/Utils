@@ -108,6 +108,11 @@ Path Path::ParentDirectory() throw(InvalidPath) {
     return parent_path;
 }
 
+std::ostream &operator<<(std::ostream &os, const Path &path) {
+    os << path.ToString();
+    return os;
+}
+
 } // namespace posix
 
 } // namespace xal

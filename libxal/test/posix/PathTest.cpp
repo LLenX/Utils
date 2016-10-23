@@ -41,6 +41,11 @@ TEST(PathStaticTest, TestHome) {
     EXPECT_STREQ(Path::HomeDirectory().ToString().data(), "/home/xuemq12");
 }
 
+TEST(PathStaticTest, TestCWD) {
+    EXPECT_STREQ(Path::CurrentWorkingDirectory().ToString().data(),
+                 "/home/xuemq12/my/code/github/LLenX/Utils/libxal/test");
+}
+
 class PathTest : public ::testing::Test {
   protected:
     void SetUp() {
@@ -171,4 +176,29 @@ TEST_F(PathTest, TestFileName) {
     EXPECT_STREQ(Path::FromString("").FileName().data(), "");
     EXPECT_STREQ(Path::FromString(".././..").FileName().data(), "");
     EXPECT_STREQ(Path::FromString("/").FileName().data(), "");
+}
+
+TEST_F(PathTest, TestIsParent) {
+    EXPECT_FALSE(path1.IsParentOf(path2));
+    EXPECT_FALSE(path2.IsParentOf(path1));
+    EXPECT_FALSE(path3.IsParentOf(path1));
+    EXPECT_FALSE(path3.IsParentOf(path2));
+    EXPECT_FALSE(path1.IsParentOf(path3));
+    EXPECT_FALSE(path2.IsParentOf(path3));
+
+    Path path4("/hello"), path5("hello/"), path6(".."), path7("../.."), path8;
+    EXPECT_TRUE(path4.IsParentOf(path1));
+    EXPECT_TRUE(path5.IsParentOf(path2));
+    EXPECT_TRUE(path6.IsParentOf(path2));
+    EXPECT_TRUE(path6.IsParentOf(path8));
+    EXPECT_TRUE(path7.IsParentOf(path2));
+    EXPECT_TRUE(path7.IsParentOf(path3));
+    EXPECT_TRUE(path7.IsParentOf(path6));
+    EXPECT_FALSE(path1.IsParentOf(path4));
+    EXPECT_FALSE(path2.IsParentOf(path5));
+    EXPECT_FALSE(path2.IsParentOf(path6));
+    EXPECT_FALSE(path2.IsParentOf(path7));
+    EXPECT_FALSE(path3.IsParentOf(path7));
+    EXPECT_FALSE(path6.IsParentOf(path7));
+    EXPECT_FALSE(path8.IsParentOf(path6));
 }

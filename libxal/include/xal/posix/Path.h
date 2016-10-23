@@ -5,6 +5,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <ostream>
 
 namespace xal {
 namespace posix {
@@ -185,6 +186,8 @@ class Path {
      */
     std::unique_ptr<PathImpl> path_impl_;
 };
+
+std::ostream &operator<<(std::ostream &os, const Path &path);
 
 } // namespace posix
 } // namespace xal
